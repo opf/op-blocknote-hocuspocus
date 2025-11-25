@@ -22,15 +22,15 @@
     "node": ">=22.18"
   },
   "dependencies": {
-    "@blocknote/server-util": "^0.41.1",
+    "@blocknote/server-util": "^0.42.3",
     "@hocuspocus/server": "^3.2.3",
     "op-blocknote-extensions": "https://github.com/opf/op-blocknote-extensions/releases/download/v0.0.9/op-blocknote-extensions-0.0.9.tgz",
     "tsx": "^4.20.5"
   },
   "devDependencies": {
-    "@blocknote/core": "^0.41.1",
+    "@blocknote/core": "^0.42.3",
     "@eslint/js": "^9.35.0",
-    "@eslint/json": "^0.13.2",
+    "@eslint/json": "^0.14.0",
     "@stylistic/eslint-plugin": "^5.3.1",
     "@types/node": "^24.4.0",
     "eslint": "^9.35.0",
