@@ -1,11 +1,11 @@
 import type { onAuthenticatePayload, onLoadDocumentPayload, onStoreDocumentPayload } from "@hocuspocus/server";
 import { Extension } from "@hocuspocus/server";
 import * as Y from "yjs";
-import type { ApiResponseDocument } from "../types";
+import type { ApiResponseDocument } from "../types.js";
 import { ServerBlockNoteEditor } from "@blocknote/server-util";
 import { BlockNoteSchema } from "@blocknote/core";
 import { openProjectWorkPackageStaticBlockSpec } from "op-blocknote-extensions";
-import { decryptToken } from "../services/decryptTokenService";
+import { decryptToken } from "../services/decryptTokenService.js";
 
 export const editorSchema = BlockNoteSchema.create().extend({
   blockSpecs: {
@@ -111,7 +111,6 @@ export class OpenProjectApi implements Extension {
     Y.applyUpdate(tempYdoc, Y.encodeStateAsUpdate(data.document));
     const tempFragment = tempYdoc.getXmlFragment("document-store");
     const editorData = editor.yXmlFragmentToBlocks(tempFragment);
-    // @ts-expect-error BlockNote types are complicated
     const markdownData = await editor.blocksToMarkdownLossy(editorData);
 
     const response = await fetch(resourceUrl, {

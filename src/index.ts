@@ -1,5 +1,5 @@
 import { Server } from "@hocuspocus/server";
-import { OpenProjectApi } from "./extensions/openProjectApi";
+import { OpenProjectApi } from "./extensions/openProjectApi.js";
 
 
 const server = new Server({

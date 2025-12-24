@@ -1,4 +1,4 @@
-FROM node:22.18
+FROM node:24.12
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev
