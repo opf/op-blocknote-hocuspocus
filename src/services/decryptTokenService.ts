@@ -1,12 +1,17 @@
 import { createDecipheriv, createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 
 const ALGORITHM = "aes-256-gcm";
- 
-if (!process.env.SECRET) {
-  throw new Error("SECRET environment variable is not set.");
+
+const SECRET = (
+  process.env.SECRET_FILE
+  ? fs.readFileSync(process.env.SECRET_FILE, { encoding: 'utf8', flag: 'r' })
+  : process.env.SECRET
+);
+if (!SECRET) {
+  throw new Error("SECRET_FILE or SECRET environment variable must be set.");
 }
-const SECRET_ENV = process.env.SECRET;
-const SECRET = createHash("sha256").update(SECRET_ENV).digest();
+const SECRET_HASH = createHash("sha256").update(SECRET).digest();
 
 type PackedParams = {
   resource_url: string;
@@ -20,13 +25,13 @@ type PackedParams = {
 export function decryptToken(encrypted:string):PackedParams {
   const [token, iv, authTag] = encrypted.split('--').map((part:string) => Buffer.from(part, 'base64'));
 
-  const decipher = createDecipheriv(ALGORITHM, SECRET, iv);
+  const decipher = createDecipheriv(ALGORITHM, SECRET_HASH, iv);
   decipher.setAuthTag(authTag);
 
   const decrypted = Buffer.concat([
     decipher.update(token),
     decipher.final()
   ]);
-  
+
   return JSON.parse(decrypted.toString());
 }
