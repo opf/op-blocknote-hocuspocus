@@ -6,6 +6,7 @@ import { openProjectWorkPackageStaticBlockSpec } from "op-blocknote-extensions";
 import * as Y from "yjs";
 import { decryptToken } from "../services/decryptTokenService";
 import type { ApiResponseDocument } from "../types";
+import { fetchResource } from "../services/resourceService";
 
 export const editorSchema = BlockNoteSchema.create().extend({
   blockSpecs: {
@@ -50,13 +51,7 @@ export class OpenProjectApi implements Extension {
       throw new Error('Unauthorized: Token resource URL does not match document.');
     }
 
-    const response = await fetch(resourceUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${oauth_token}`,
-      },
-    });
+    const response = await fetchResource(resourceUrl, oauth_token);
 
     if (!response.ok) {
       throw new Error('Unauthorized: Invalid token or document access denied.');
@@ -78,15 +73,7 @@ export class OpenProjectApi implements Extension {
   async onLoadDocument(data: onLoadDocumentPayload) {
     const { resourceUrl } = data.context;
 
-    printLog(`GET ${resourceUrl}`);
-
-    const response = await fetch(resourceUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${data.context.token}`,
-      },
-    });
+    const response = await fetchResource(resourceUrl, data.context.token);
 
     if (!response.ok) {
       console.warn(`Error fetching document: ${response.statusText}`);
@@ -117,8 +104,6 @@ export class OpenProjectApi implements Extension {
       return;
     }
 
-    printLog(`PATCH ${resourceUrl}`);
-
     const base64Data = Buffer.from(Y.encodeStateAsUpdate(data.document)).toString("base64");
 
     // Create a copy of the document to avoid side effects
@@ -130,12 +115,8 @@ export class OpenProjectApi implements Extension {
     // @ts-expect-error BlockNote types are complicated
     const markdownData = await editor.blocksToMarkdownLossy(editorData);
 
-    const response = await fetch(resourceUrl, {
+    const response = await fetchResource(resourceUrl, data.context.token, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${data.context.token}`,
-      },
       body: JSON.stringify({
         content_binary: base64Data,
         description: markdownData,
