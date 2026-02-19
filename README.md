@@ -1,3 +1,9 @@
+# NOTE: This plugin is now part of OpenProject Core 🥳
+
+As of [opf/openproject#21958](https://github.com/opf/openproject/pull/21958) this extension was merged into OpenProject core [v17.2](https://www.openproject.org/docs/release-notes/17-2-0/). Hence, further changes or improvements will be made directly within OpenProject.
+
+Many thanks to everyone who worked on this extension - inside and outside of OpenProject's core development team! 💙
+
 # op-blocknote-hocuspocus
 
 [![Tests](https://github.com/opf/op-blocknote-hocuspocus/actions/workflows/test.yml/badge.svg)](https://github.com/opf/op-blocknote-hocuspocus/actions/workflows/test.yml)
